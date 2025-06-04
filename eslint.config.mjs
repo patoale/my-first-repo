@@ -1,6 +1,7 @@
 // @ts-check
 
 import eslint from '@eslint/js';
+import jestPlugin from 'eslint-plugin-jest';
 import prettierConfigRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -51,6 +52,19 @@ export default tseslint.config(
       },
     },
     extends: [tseslint.configs.disableTypeChecked],
+  },
+  {
+    files: ['test/**/*.spec.ts', 'test/**/*.test.ts'],
+    plugins: {
+      jest: jestPlugin,
+    },
+    languageOptions: {
+      globals: jestPlugin.environments.globals.globals,
+    },
+    rules: {
+      ...jestPlugin.configs['flat/recommended'].rules,
+      ...jestPlugin.configs['flat/style'].rules,
+    },
   },
   prettierConfigRecommended,
 );
